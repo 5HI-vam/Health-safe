@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Production & Build Outputs
+dist/
+**/dist/
+build/
+
+# Uploaded Evidence & Temporary Files
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/uploads/evidence/*
+!backend/uploads/evidence/.gitkeep
+
+# Logs & Debugging
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE & OS Metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
