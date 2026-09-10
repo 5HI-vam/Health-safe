@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Header({
   activeTab = 'manual',
@@ -6,10 +6,22 @@ export default function Header({
   onOpenClinicBadges,
   apiOnline = true,
 }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleNavClick = (tab) => {
+    onChangeTab(tab);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleBadgesClick = () => {
+    if (onOpenClinicBadges) onOpenClinicBadges();
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className="app-header">
       <div className="header-container">
-        <div className="brand-group" onClick={() => onChangeTab('manual')} style={{ cursor: 'pointer' }}>
+        <div className="brand-group" onClick={() => handleNavClick('manual')} style={{ cursor: 'pointer' }}>
           <div className="brand-logo-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -28,13 +40,59 @@ export default function Header({
           </div>
         </div>
 
+        {/* Right side controls: Status Pill + Mobile Hamburger Button */}
+        <div className="header-right-actions">
+          <div className="header-status-pill">
+            <span className={`status-indicator-dot ${apiOnline ? 'online' : 'offline'}`}></span>
+            <span className="status-indicator-label">
+              {apiOnline ? 'Registry Live API Connected' : 'Registry API Offline'}
+            </span>
+          </div>
+
+          <button
+            id="mobile-hamburger-btn"
+            type="button"
+            className="mobile-hamburger-btn"
+            aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isMobileMenuOpen}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            {isMobileMenuOpen ? (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
+          </button>
+        </div>
+
         {/* Navigation Tabs (Phase 1, Phase 2, and Phase 3) */}
-        <nav className="header-nav-tabs">
+        <nav className={`header-nav-tabs ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+          {/* Close button — only visible inside the mobile panel */}
+          <button
+            type="button"
+            className="mobile-nav-close-btn"
+            aria-label="Close navigation menu"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            Close
+          </button>
+          <hr className="mobile-nav-divider" />
           <button
             id="nav-manual-search-btn"
             type="button"
             className={`nav-tab-link ${activeTab === 'manual' ? 'active' : ''}`}
-            onClick={() => onChangeTab('manual')}
+            onClick={() => handleNavClick('manual')}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8" />
@@ -47,7 +105,7 @@ export default function Header({
             id="nav-scan-qr-btn"
             type="button"
             className={`nav-tab-link ${activeTab === 'qr' ? 'active' : ''}`}
-            onClick={() => onChangeTab('qr')}
+            onClick={() => handleNavClick('qr')}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="3" width="7" height="7" />
@@ -62,7 +120,7 @@ export default function Header({
             id="nav-report-practice-btn"
             type="button"
             className={`nav-tab-link alert-tab ${activeTab === 'report' ? 'active' : ''}`}
-            onClick={() => onChangeTab('report')}
+            onClick={() => handleNavClick('report')}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
@@ -76,7 +134,7 @@ export default function Header({
             id="nav-patient-safety-btn"
             type="button"
             className={`nav-tab-link safety-tab ${activeTab === 'safety' ? 'active' : ''}`}
-            onClick={() => onChangeTab('safety')}
+            onClick={() => handleNavClick('safety')}
             title="Patient Safety & Clinical Care Grievance Module"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -89,7 +147,7 @@ export default function Header({
             id="nav-track-case-btn"
             type="button"
             className={`nav-tab-link ${activeTab === 'track' ? 'active' : ''}`}
-            onClick={() => onChangeTab('track')}
+            onClick={() => handleNavClick('track')}
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -104,7 +162,7 @@ export default function Header({
             id="nav-authority-portal-btn"
             type="button"
             className={`nav-tab-link authority-tab ${activeTab === 'authority' ? 'active' : ''}`}
-            onClick={() => onChangeTab('authority')}
+            onClick={() => handleNavClick('authority')}
             title="Statutory Authority Review & Case Routing Dashboard"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -117,7 +175,7 @@ export default function Header({
             id="nav-clinic-badges-btn"
             type="button"
             className="nav-tab-link highlight"
-            onClick={onOpenClinicBadges}
+            onClick={handleBadgesClick}
             title="View printable / scannable demonstration QR badges"
           >
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -128,12 +186,12 @@ export default function Header({
           </button>
         </nav>
 
-        <div className="header-status-pill">
-          <span className={`status-indicator-dot ${apiOnline ? 'online' : 'offline'}`}></span>
-          <span className="status-indicator-label">
-            {apiOnline ? 'Registry Live API Connected' : 'Registry API Offline'}
-          </span>
-        </div>
+        {isMobileMenuOpen && (
+          <div
+            className="mobile-menu-backdrop"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
       </div>
     </header>
   );

@@ -1,26 +1,21 @@
 # =============================================================
-#  Health-Safe — Frontend .gitignore (Vite + React)
+#  Health-Safe — Backend .gitignore (Node.js / Express)
 # =============================================================
 
 # ─── Dependencies ────────────────────────────────────────────
 node_modules/
 
-# ─── Build Outputs ───────────────────────────────────────────
-dist/
-dist-ssr/
-
 # ─── Environment Variables ───────────────────────────────────
+# Add a .env.example with dummy values for onboarding
 .env
 .env.*
 !.env.example
-*.local
 
-# ─── Vite Cache ──────────────────────────────────────────────
-.vite/
-
-# ─── Testing & Coverage ──────────────────────────────────────
-coverage/
-.nyc_output/
+# ─── Uploads & User-Generated Files ──────────────────────────
+uploads/**
+!uploads/.gitkeep
+uploads/evidence/**
+!uploads/evidence/.gitkeep
 
 # ─── Logs ────────────────────────────────────────────────────
 logs/
@@ -28,17 +23,20 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+
+# ─── Test / Scratch Scripts ──────────────────────────────────
+test_*.js
+seed_*.js
+
+# ─── Runtime & Cache ─────────────────────────────────────────
+.cache/
+tmp/
+temp/
 
 # ─── IDEs & Editors ──────────────────────────────────────────
 .vscode/
 !.vscode/extensions.json
-!.vscode/settings.json
 .idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
 *.swp
 *.sw?
 
